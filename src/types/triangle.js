@@ -68,11 +68,11 @@ export const Triangle = class {
         this.line2 = lineInfoOf(this.v2, this.v3);
         this.line3 = lineInfoOf(this.v1, this.v3);
 
-        this.circumCenter = circumCenter();
-        this.circumRadius = this.circumRadius();
+        this.circumcenter = this.circumCenter();
+        this.circumradius = this.circumRadius();
     }
 
-    circumCenter() {
+    circumcenter() {
         let mp1 = Vertex((this.v1.x + this.v2.x)/2, (this.v1.y + this.v2.y)/2);
         let mp2 = Vertex((this.v2.x + this.v3.x)/2, (this.v2.y + this.v3.y)/2);
         let mp3 = Vertex((this.v1.x + this.v3.x)/2, (this.v1.y + this.v3.y)/2);
@@ -86,16 +86,16 @@ export const Triangle = class {
 
             return perp_line2.intersectionWith(perp_line3);
         } else if (this.line2.slope === 0) {
-            let recip1 = 1/slope1;
-            let recip3 = 1/slope3;
+            let recip1 = 1/this.line1.slope;
+            let recip3 = 1/this.line3.slope;
 
             const perp_line1 = new Line(recip1, mp1);
             const perp_line3 = new Line(recip3, mp3);
 
             return perp_line1.intersectionWith(perp_line3);
         } else {
-            let recip1 = 1/slope1;
-            let recip2 = 1/slope2;
+            let recip1 = 1/this.line1.slope;
+            let recip2 = 1/this.line2.slope;
 
             const perp_line1 = new Line(recip1, mp1);
             const perp_line2 = new Line(recip2, mp2);
@@ -104,7 +104,11 @@ export const Triangle = class {
         }
     }
 
-    circumRadius() {
+    circumradius() {
         return euclidean(this.circumCenter, this.v1);
+    }
+
+    inCircumcircle(v) {
+        return euclidean(this.circumCenter, v) <= this.circumradius;
     }
 }
