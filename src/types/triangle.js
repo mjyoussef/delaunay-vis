@@ -1,5 +1,5 @@
 import { Vertex } from "./graphs";
-
+import { euclidean } from "../utils/distance";
 
 const VERTICAL = "vertical";
 const SLOPED = "sloped";
@@ -63,16 +63,52 @@ export const Triangle = class {
         this.v1 = v1;
         this.v2 = v2;
         this.v3 = v3;
+
+        this.line1 = lineInfoOf(this.v1, this.v2);
+        this.line2 = lineInfoOf(this.v2, this.v3);
+        this.line3 = lineInfoOf(this.v1, this.v3);
+
+        this.circumcenter = this.circumCenter();
+        this.circumradius = this.circumRadius();
     }
 
-    calculateCircumCenter() {
+    circumcenter() {
         let mp1 = Vertex((this.v1.x + this.v2.x)/2, (this.v1.y + this.v2.y)/2);
         let mp2 = Vertex((this.v2.x + this.v3.x)/2, (this.v2.y + this.v3.y)/2);
         let mp3 = Vertex((this.v1.x + this.v3.x)/2, (this.v1.y + this.v3.y)/2);
 
-        let slope1 = 0;
-        let slope2 = 0;
-        let slope3 = 0;
-        
+        if (this.line1.slope === 0) {
+            let recip2 = 1/(this.line2.slope);
+            let recip3 = 1/(this.line3.slope);
+
+            const perp_line2 = new Line(recip2, mp2);
+            const perp_line3 = new Line(recip3, mp3);
+
+            return perp_line2.intersectionWith(perp_line3);
+        } else if (this.line2.slope === 0) {
+            let recip1 = 1/this.line1.slope;
+            let recip3 = 1/this.line3.slope;
+
+            const perp_line1 = new Line(recip1, mp1);
+            const perp_line3 = new Line(recip3, mp3);
+
+            return perp_line1.intersectionWith(perp_line3);
+        } else {
+            let recip1 = 1/this.line1.slope;
+            let recip2 = 1/this.line2.slope;
+
+            const perp_line1 = new Line(recip1, mp1);
+            const perp_line2 = new Line(recip2, mp2);
+
+            return perp_line1.intersectionWith(perp_line2);
+        }
+    }
+
+    circumradius() {
+        return euclidean(this.circumCenter, this.v1);
+    }
+
+    inCircumcircle(v) {
+        return euclidean(this.circumCenter, v) <= this.circumradius;
     }
 }

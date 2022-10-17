@@ -1,8 +1,7 @@
 export const Vertex = class {
-    constructor(x, y, id) {
+    constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.id = id;
     }
 
     equals(v) {
@@ -11,13 +10,24 @@ export const Vertex = class {
 }
 
 export const Edge = class {
-    constructor(v1, v2, id) {
+    constructor(v1, v2) {
         this.v1 = v1;
         this.v2 = v2;
-        this.id = id;
+        
+        if (v1.x < v2.x) {
+            return new String(v1.x) + new String(v1.y) + new String(v2.x) + new String(v2.y);
+        } else if (v1.x > v2.x) {
+            return new String(v2.x) + new String(v2.y) + new String(v1.x) + new String(v1.y);
+        } else {
+            if (v1.y <= v2.y) {
+                return new String(v1.x) + new String(v1.y) + new String(v2.x) + new String(v2.y);
+            } else {
+                return new String(v2.x) + new String(v2.y) + new String(v1.x) + new String(v1.y);
+            }
+        }
     }
 
     equals(e) {
-        return (this.v1.equals(e.v1) && this.v2.equals(e.v2)) || (this.v1.equals(e.v2) && this.v2.equsls(e.v1));
+        return (this.v1.equals(e.v1) && this.v2.equals(e.v2)) || (this.v1.equals(e.v2) && this.v2.equals(e.v1));
     }
 }
