@@ -1,6 +1,5 @@
-import { HighlightSpanKind } from "typescript";
 import { Vertex } from "./graphs";
-
+import { euclidean } from "../utils/distance";
 
 const VERTICAL = "vertical";
 const SLOPED = "sloped";
@@ -68,9 +67,12 @@ export const Triangle = class {
         this.line1 = lineInfoOf(this.v1, this.v2);
         this.line2 = lineInfoOf(this.v2, this.v3);
         this.line3 = lineInfoOf(this.v1, this.v3);
+
+        this.circumCenter = circumCenter();
+        this.circumRadius = this.circumRadius();
     }
 
-    calculateCircumCenter() {
+    circumCenter() {
         let mp1 = Vertex((this.v1.x + this.v2.x)/2, (this.v1.y + this.v2.y)/2);
         let mp2 = Vertex((this.v2.x + this.v3.x)/2, (this.v2.y + this.v3.y)/2);
         let mp3 = Vertex((this.v1.x + this.v3.x)/2, (this.v1.y + this.v3.y)/2);
@@ -100,5 +102,9 @@ export const Triangle = class {
 
             return perp_line1.intersectionWith(perp_line2);
         }
+    }
+
+    circumRadius() {
+        return euclidean(this.circumCenter, this.v1);
     }
 }
