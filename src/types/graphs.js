@@ -7,6 +7,10 @@ export const Vertex = class {
     equals(v) {
         return (this.x === v.x) && (this.y === v.y);
     }
+
+    toString(v) {
+        return new String(this.x) + new String(this.y);
+    }
 }
 
 export const Edge = class {
