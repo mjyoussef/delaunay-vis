@@ -1,6 +1,12 @@
 import { Vertex } from "../types/graphs";
 import { euclidean } from "./distance";
 
+/**
+ * Creates a minimum enclosing circle from a set of vertices using the two points that are
+ * farthest apart.
+ * @param {Array<Vertex>} vertices 
+ * @returns a tuple storing the diameter of the circle and its center
+ */
 export function minEnclosingCircle(vertices) {
     let maxDist = 0;
     let p1 = vertices[0];
@@ -10,7 +16,7 @@ export function minEnclosingCircle(vertices) {
         for (let j=i+1; j<vertices.length; j++) {
             let dist = euclidean(vertices[i], vertices[j]);
             if (dist > maxDist) {
-                minDist = dist;
+                maxDist = dist;
                 p1 = vertices[i];
                 p2 = vertices[j];
             }
