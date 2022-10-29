@@ -5,11 +5,11 @@ import { Vertex } from "../types/graphs";
 export function superTriangleFrom(vertices, margin) {
     const circle = minEnclosingCircle(vertices);
 
-    const yTop = circle.center.y + (circle.diameter/2) + margin;
-    const yBottom = circle.center.y - (circle.diameter/2) - margin;
+    const yTop = circle.center.y + (circle.radius) + margin;
+    const yBottom = circle.center.y - (circle.radius) - margin;
 
-    const xRight = circle.center.x + (circle.diameter/2) + margin;
-    const xLeft = circle.center.x - (circle.diameter/2) - margin;
+    const xRight = circle.center.x + (circle.radius) + margin;
+    const xLeft = circle.center.x - (circle.radius) - margin;
 
     const v1 = new Vertex(xLeft, yBottom);
     const v2 = new Vertex(xRight, yBottom);
