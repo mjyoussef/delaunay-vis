@@ -77,6 +77,8 @@ export class Line {
 }
 
 export class Triangle {
+
+    // expects order of arguments to be bottom-left, bottom-right, apex
     constructor(v1, v2, v3) {
         this.v1 = v1;
         this.v2 = v2;

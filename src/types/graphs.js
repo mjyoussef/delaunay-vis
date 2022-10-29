@@ -26,6 +26,7 @@ export class Edge {
     constructor(v1, v2) {
         this.v1 = v1;
         this.v2 = v2;
+        this.id = this.toString(v1, v2);
     }
 
     equals(e) {
@@ -36,7 +37,7 @@ export class Edge {
      * Returns a string containing the vertices in lexicographic order
      * @returns 
      */
-    toString() {
+    toString(v1, v2) {
         if (v1.x < v2.x) {
             return new String(v1.x) + new String(v1.y) + new String(v2.x) + new String(v2.y);
         } else if (v1.x > v2.x) {

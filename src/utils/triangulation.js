@@ -2,23 +2,42 @@ import { Edge } from "../types/graphs";
 import { Triangle } from "../types/triangle";
 import { superTriangleFrom } from "./superTriangle"
 
+/**
+ * Checks whether or not a vertex matches any vertex in a triangle
+ * @param {Vertex} v 
+ * @param {Array<Vertex>} triangle 
+ * @returns true or false
+ */
 function containsVertex(v, triangle) {
     return v.equals(triangle.v1) || v.equals(triangle.v2) || v.equals(triangle.v3); 
 }
 
-function uniqueEdges(edges) {
+/**
+ * Removes duplicate edges from a list of edges
+ * @param {Array<Edge>} edges 
+ * @returns a list of edges
+ */
+export function uniqueEdges(edges) {
     const seen = new Set();
     const uniqueEdges = [];
 
     for (let i=0; i<edges.length; i++) {
         if (!seen.has(edges[i].id)) {
             uniqueEdges.push(edges[i]);
+            seen.add(edges[i].id);
         }
     }
 
     return uniqueEdges;
 }
 
+/**
+ * Creates a new edges from triangles that have circumcircles containing the provided vertex
+ * and removes those triangles
+ * @param {Vertex} v 
+ * @param {Array<Triangle>} triangles 
+ * @returns a new array of triangles
+ */
 function considerVertex(v, triangles) {
     const edges = [];
 
@@ -43,6 +62,11 @@ function considerVertex(v, triangles) {
     return triangles;
 }
 
+/**
+ * Constructs a Delauney triangulation from an array of vertices
+ * @param {Array<Vertex>} vertices 
+ * @returns an array of triangles
+ */
 export function triangulate(vertices) {
     const superTriangle = superTriangleFrom(vertices, 0.1);
 
@@ -61,4 +85,6 @@ export function triangulate(vertices) {
                 && !containsVertex(v2, superTriangle)
                 && !containsVertex(v3, superTriangle);
     });
+
+    return output;
 }
