@@ -90,19 +90,19 @@ describe("tests for Triangle", () => {
     test("right triangle", () => {
         let triangle = new Triangle(new Vertex(0,0), new Vertex(0,5), new Vertex(3,0));
 
-        expect(triangle.circumcenter).toMatchObject(new Vertex(1.5, 2.5));
+        expect(triangle.circumCenter()).toMatchObject(new Vertex(1.5, 2.5));
     });
 
     test("isosceles triangle", () => {
         let triangle = new Triangle(new Vertex(0,0), new Vertex(5,0), new Vertex(2.5, 5));
 
-        expect(triangle.circumcenter).toMatchObject(new Vertex(2.5, 1.875));
+        expect(triangle.circumCenter()).toMatchObject(new Vertex(2.5, 1.875));
     });
 
     test("obtuse triangle", () => {
         let triangle = new Triangle(new Vertex(2,2), new Vertex(3,8), new Vertex(4,-3));
 
-        expect(triangle.circumcenter.x).toBeCloseTo(12.559, 2);
-        expect(triangle.circumcenter.y).toBeCloseTo(3.324, 2);
+        expect(triangle.circumCenter().x).toBeCloseTo(12.559, 2);
+        expect(triangle.circumCenter().y).toBeCloseTo(3.324, 2);
     });
 });

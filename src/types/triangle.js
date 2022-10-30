@@ -80,17 +80,18 @@ export class Triangle {
 
     // expects order of arguments to be bottom-left, bottom-right, apex
     constructor(v1, v2, v3) {
+        //console.log(v1,v2,v3);
         this.v1 = v1;
         this.v2 = v2;
         this.v3 = v3;
 
-        this.line1 = lineInfoOf(this.v1, this.v2);
-        this.line2 = lineInfoOf(this.v2, this.v3);
-        this.line3 = lineInfoOf(this.v1, this.v3);
+        this.line1 = lineInfoOf(v1, v2);
+        this.line2 = lineInfoOf(v2, v3);
+        this.line3 = lineInfoOf(v1, v3);
 
         // accessed frequently, so it is a better idea to store as an instance variable
-        this.circumcenter = this.circumcenter();
-        this.circumradius = this.circumradius();
+        //this.circumcenter = this.circumCenter();
+        //this.circumradius = this.circumRadius();
     }
 
     /**
@@ -114,7 +115,7 @@ export class Triangle {
      * Computes the circumcenter of a triangle by finding the intersection of two perpendicular bisectors
      * @returns a Vertex representing the circumcenter of a triangle
      */
-    circumcenter() {
+    circumCenter() {
 
         // store the midpoints of each side of the triangle
         let mp1 = new Vertex((this.v1.x + this.v2.x)/2, (this.v1.y + this.v2.y)/2);
@@ -135,16 +136,17 @@ export class Triangle {
      * Computes the radius of the circumcircle of the triangle
      * @returns a number
      */
-    circumradius() {
-        return euclidean(this.circumcenter, this.v1);
+    circumRadius() {
+        const output = euclidean(this.circumCenter(), this.v1);
+        return output;
     }
 
     /**
-     * Determines whether or not a vertex is inside circumcircle of our triangle
+     * Determines whether or not a vertex is inside the circumcircle of our triangle
      * @param {Vertex} v 
      * @returns true or false
      */
     inCircumcircle(v) {
-        return euclidean(this.circumcenter, v) <= this.circumradius;
+        return euclidean(this.circumCenter(), v) < this.circumRadius() - 0.001;
     }
 }
