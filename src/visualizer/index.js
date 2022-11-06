@@ -1,4 +1,39 @@
-import { Application } from "pixi.js";
+//import { Application } from "pixi.js";
 
-let app = new Application({ width: 400, height: 600 });
-document.body.appendChild(app.view);
+const slider = document.getElementById("slider")
+slider.addEventListener('change', (e) => {
+    e.preventDefault();
+    console.log(e.target.value);
+});
+
+const submit = document.getElementById("slider-input")
+submit.addEventListener('change', (e) => {
+    e.preventDefault();
+    const maximum = document.getElementById("maximum");
+    const minimum = document.getElementById("minimum");
+
+    const slider_min = document.getElementById("slider-min");
+    const slider_max = document.getElementById("slider-max");
+
+    const slider_bar = document.getElementById("slider-bar");
+    let min = slider_bar.getAttribute("min");
+    let max = slider_bar.getAttribute("max");
+
+    if (maximum.value !== "") {
+        max = maximum.value;
+    }
+
+    if (minimum.value !== "") {
+        min = minimum.value;
+    }
+
+    if (parseInt(max) - parseInt(min) <= 0) {
+        alert("Invalid range!")
+    } else {
+        slider_bar.setAttribute("min", min);
+        slider_bar.setAttribute("max", max);
+
+        slider_min.innerText = min;
+        slider_max.innerText = max;
+    }
+});
