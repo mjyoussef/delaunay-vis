@@ -4,9 +4,15 @@ import { euclidean } from "../utils/distance";
 const VERTICAL = "vertical";
 const SLOPED = "sloped";
 
-function lineInfoOf(v1, v2) {
-    diffY = v1.y - v2.y;
-    diffX = v1.x - v2.x;
+/**
+ * Generate a line from two vertices
+ * @param {Vertex} v1 vertex 1
+ * @param {Vertex} v2 vertex 2
+ * @returns a tuple containing a point on the line and the slope of the line (null if vertical)
+ */
+export function lineInfoOf(v1, v2) {
+    const diffY = v1.y - v2.y;
+    const diffX = v1.x - v2.x;
 
     if (diffX === 0) {
         return {pt: v1, slope: null};
@@ -15,100 +21,150 @@ function lineInfoOf(v1, v2) {
     return {pt: v1, slope: diffY/diffX};
 }
 
-const Line = class {
-    constructor(v1, v2) {
-        this.lineInfo = lineInfoOf(v1, v2);
-    }
+/**
+ * @class
+ * Stores the line formed between two vertices and provides method for computing intersection
+ * with other lines
+ */
+export class Line {
 
-    constructor(slope, v) {
+    constructor(v, slope) {
         this.lineInfo = {pt: v, slope: slope};
     }
 
+    /**
+     * Finds the intersection of this line with another line
+     * @param {Line} line 
+     * @returns returns the vertex where they intersect or null if they don't intersect
+     */
     intersectionWith(line) {
 
+        // parralel lines, even if they contain the same points, have zero intersection
         if ((this.lineInfo.slope === line.lineInfo.slope) || 
             (this.lineInfo.slope === null && line.lineInfo.slope === null)) {
             return null;
         }
 
+        // this line is vertical
         if (this.lineInfo.slope === null) {
-            m = line.lineInfo.slope;
-            v = line.lineInfo.v;
+            const m = line.lineInfo.slope;
+            const v = line.lineInfo.pt;
 
-            x = this.lineInfo.v.x;
+            const x = this.lineInfo.pt.x;
             return new Vertex(x, m*(x - v.x) + v.y);
         }
 
+        // the line passed as input is vertical
         if (line.lineInfo.slope === null) {
             return line.intersectionWith(this);
         }
 
-        m1 = this.lineInfo.slope;
-        x1 = this.lineInfo.v.x;
-        y1 = this.lineInfo.v.y;
+        const m1 = this.lineInfo.slope;
+        const x1 = this.lineInfo.pt.x;
+        const y1 = this.lineInfo.pt.y;
 
-        m2 = line.lineInfo.slope;
-        x2 = line.lineInfo.v.x;
-        y2 = line.lineInfo.v.y;
+        const m2 = line.lineInfo.slope;
+        const x2 = line.lineInfo.pt.x;
+        const y2 = line.lineInfo.pt.y;
 
-        x = ((m1 * x1) - y1 - (m2 * x2) + y2)/(m1 - m2);
-        y = m1*(x - x1) + y1;
+        // derived from m1(x-x1) + y1 = m2(x-x2) + y2
+        const x = ((m1 * x1) - y1 - (m2 * x2) + y2)/(m1 - m2);
+        const y = m1*(x - x1) + y1;
 
+        // returned in the event where both lines intersect and are not vertical
         return new Vertex(x, y);
     }
 }
 
-export const Triangle = class {
+export class Triangle {
+
+    // expects order of arguments to be bottom-left, bottom-right, apex
     constructor(v1, v2, v3) {
+        //console.log(v1,v2,v3);
         this.v1 = v1;
         this.v2 = v2;
         this.v3 = v3;
 
-        this.line1 = lineInfoOf(this.v1, this.v2);
-        this.line2 = lineInfoOf(this.v2, this.v3);
-        this.line3 = lineInfoOf(this.v1, this.v3);
+        this.line1 = lineInfoOf(v1, v2);
+        this.line2 = lineInfoOf(v2, v3);
+        this.line3 = lineInfoOf(v1, v3);
 
-        this.circumcenter = this.circumCenter();
-        this.circumradius = this.circumRadius();
+        // accessed frequently, so it is a better idea to store as an instance variable
+        //this.circumcenter = this.circumCenter();
+        //this.circumradius = this.circumRadius();
     }
 
-    circumcenter() {
-        let mp1 = Vertex((this.v1.x + this.v2.x)/2, (this.v1.y + this.v2.y)/2);
-        let mp2 = Vertex((this.v2.x + this.v3.x)/2, (this.v2.y + this.v3.y)/2);
-        let mp3 = Vertex((this.v1.x + this.v3.x)/2, (this.v1.y + this.v3.y)/2);
-
-        if (this.line1.slope === 0) {
-            let recip2 = 1/(this.line2.slope);
-            let recip3 = 1/(this.line3.slope);
-
-            const perp_line2 = new Line(recip2, mp2);
-            const perp_line3 = new Line(recip3, mp3);
-
-            return perp_line2.intersectionWith(perp_line3);
-        } else if (this.line2.slope === 0) {
-            let recip1 = 1/this.line1.slope;
-            let recip3 = 1/this.line3.slope;
-
-            const perp_line1 = new Line(recip1, mp1);
-            const perp_line3 = new Line(recip3, mp3);
-
-            return perp_line1.intersectionWith(perp_line3);
-        } else {
-            let recip1 = 1/this.line1.slope;
-            let recip2 = 1/this.line2.slope;
-
-            const perp_line1 = new Line(recip1, mp1);
-            const perp_line2 = new Line(recip2, mp2);
-
-            return perp_line1.intersectionWith(perp_line2);
+    /**
+     * Computes the recipricol of a slope
+     * @param {number} slope 
+     * @returns a number of null if recipricol is undefined
+     */
+    recipricolOf(slope) {
+        if (slope === null) {
+            return 0;
         }
+
+        if (slope === 0) {
+            return null;
+        }
+
+        return -1/slope;
     }
 
-    circumradius() {
-        return euclidean(this.circumCenter, this.v1);
+    /**
+     * Computes the circumcenter of a triangle by finding the intersection of two perpendicular bisectors
+     * @returns a Vertex representing the circumcenter of a triangle
+     */
+    circumCenter() {
+        // store the midpoints of each side of the triangle
+        let mp1 = new Vertex((this.v1.x + this.v2.x)/2, (this.v1.y + this.v2.y)/2);
+        let mp2 = new Vertex((this.v2.x + this.v3.x)/2, (this.v2.y + this.v3.y)/2);
+
+        // find recipricol of slopes for first two slopes
+        const recip1 = this.recipricolOf(this.line1.slope);
+        const recip2 = this.recipricolOf(this.line2.slope);
+
+        // find the intersection of first two perpendicular bisectors
+        const perp_line1 = new Line(mp1, recip1);
+        const perp_line2 = new Line(mp2, recip2);
+
+        return perp_line1.intersectionWith(perp_line2);
     }
 
+    /**
+     * Computes the radius of the circumcircle of the triangle
+     * @returns a number
+     */
+    circumRadius() {
+        const output = euclidean(this.circumCenter(), this.v1);
+        return output;
+    }
+
+    /**
+     * Determines whether or not a vertex is inside the circumcircle of our triangle
+     * @param {Vertex} v 
+     * @returns true or false
+     */
     inCircumcircle(v) {
-        return euclidean(this.circumCenter, v) <= this.circumradius;
+        if ((this.v1.x === this.v2.x) && (this.v2.x === this.v3.x)) {
+
+            const min = Math.min(this.v1.y, this.v2.y, this.v3.y);
+            const max = Math.max(this.v1.y, this.v2.y, this.v3.y);
+
+            const mb = new Vertex((this.v1.x), (min + max)/2);
+            
+            return euclidean(mb, v) < (max - mb.y) - 0.001;
+        }
+
+        if ((this.v1.y === this.v2.y) && (this.v2.y === this.v3.y)) {
+
+            const min = Math.min(this.v1.x, this.v2.x, this.v3.x);
+            const max = Math.max(this.v1.x, this.v2.x, this.v3.x);
+
+            const mb = new Vertex((min + max)/2, this.v1.y);
+            return euclidean(mb, v) < (max - mb.x) - 0.001;
+        }
+
+        return euclidean(this.circumCenter(), v) < this.circumRadius() - 0.001;
     }
 }
