@@ -72,7 +72,7 @@ function considerVertex(v, triangles) {
  * @returns an array of triangles
  */
 export function triangulate(vertices) {
-    const superTriangle = superTriangleFrom(vertices, 0.1);
+    const superTriangle = superTriangleFrom(vertices, 10);
 
     let triangles = [superTriangle];
 
@@ -91,4 +91,23 @@ export function triangulate(vertices) {
     });
 
     return output;
+}
+
+/**
+ * Returns the set of edges in a Delauney triangulation
+ * @param {Array<Triangle>} triangles array of triangles
+ * @returns a list of edges
+ */
+export function get_triangulation_edges(triangles) {
+    const edges = [];
+    for (let i=0; i<triangles.length; i++) {
+        const t = triangles[i];
+        const e1 = new Edge(t.v1, t.v2);
+        const e2 = new Edge(t.v2, t.v3);
+        const e3 = new Edge(t.v1, t.v3);
+
+        edges.push(e1, e2, e3);
+    }
+
+    return uniqueEdges(edges);
 }

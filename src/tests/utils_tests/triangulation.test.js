@@ -1,5 +1,6 @@
 import { Edge, Vertex } from "../../types/graphs";
 import { triangulate, uniqueEdges } from "../../utils/triangulation";
+import { randPointGenerator } from "../../utils/point_generator";
 
 describe("uniqueEdges tests", () => {
     test("two edges", () => {
@@ -78,6 +79,12 @@ describe("triangulating small sets", () => {
 
     test("points along same axis", () => {
         const vertices = [new Vertex(0,0), new Vertex(2,1), new Vertex(4,4), new Vertex(2,-1), new Vertex(2,8), new Vertex(10,4), new Vertex(11,4)];
+        const output = triangulate(vertices);
+        expect(isValidTriangulation(output)).toBeTruthy();
+    });
+
+    test("random number of points", () => {
+        const vertices = randPointGenerator(30, 0, 500, 0, 500);
         const output = triangulate(vertices);
         expect(isValidTriangulation(output)).toBeTruthy();
     });
