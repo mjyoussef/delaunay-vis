@@ -1,4 +1,4 @@
-//import { Application } from "pixi.js";
+import { Application, Graphics } from "pixi.js";
 
 const slider = document.getElementById("slider")
 slider.addEventListener('change', (e) => {
@@ -37,3 +37,22 @@ submit.addEventListener('change', (e) => {
         slider_max.innerText = max;
     }
 });
+
+
+let app;
+app = new Application(
+    {
+        width: 1300,
+        height: 650
+    }
+);
+
+let obj = new Graphics();
+app.stage.addChild(obj);
+
+obj.position.set(10, 10);
+obj.lineStyle(1, 0xff0000).moveTo(30,30).lineTo(50, 50);
+obj.moveTo(60, 60).lineTo(90, 100);
+
+const display_div = document.getElementById("display");
+display_div.appendChild(app.view);

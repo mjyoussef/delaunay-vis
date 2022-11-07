@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack --mode production",
+    "watch": "watch 'npm run build'",
     "start": "nodemon --exec babel-node src/visualizer/index.js",
     "test": "jest"
   },
@@ -37,6 +38,7 @@
     "webpack-cli": "^4.10.0"
   },
   "dependencies": {
-    "pixi.js": "^6.5.6"
+    "pixi.js": "^6.5.6",
+    "watch": "^1.0.2"
   }
 }

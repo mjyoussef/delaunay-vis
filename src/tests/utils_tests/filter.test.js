@@ -1,5 +1,5 @@
 import { euclidean } from "../../utils/distance";
-import { randPointGenerator } from "./point_generator";
+import { randPointGenerator } from '../../utils/point_generator';
 import { filterClusters } from '../../utils/filter';
 
 /**

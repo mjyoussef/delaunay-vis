@@ -2,7 +2,7 @@ import { Vertex } from "../../types/graphs";
 import { Line } from "../../types/triangle";
 import { Triangle } from "../../types/triangle";
 import { superTriangleFrom } from "../../utils/superTriangle";
-import { randPointGenerator } from "./point_generator";
+import { randPointGenerator } from '../../utils/point_generator';
 
 /**
  * Determines whether or not a point is inside a triangle

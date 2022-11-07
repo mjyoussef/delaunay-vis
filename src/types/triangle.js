@@ -116,7 +116,6 @@ export class Triangle {
      * @returns a Vertex representing the circumcenter of a triangle
      */
     circumCenter() {
-
         // store the midpoints of each side of the triangle
         let mp1 = new Vertex((this.v1.x + this.v2.x)/2, (this.v1.y + this.v2.y)/2);
         let mp2 = new Vertex((this.v2.x + this.v3.x)/2, (this.v2.y + this.v3.y)/2);
@@ -147,6 +146,25 @@ export class Triangle {
      * @returns true or false
      */
     inCircumcircle(v) {
+        if ((this.v1.x === this.v2.x) && (this.v2.x === this.v3.x)) {
+
+            const min = Math.min(this.v1.y, this.v2.y, this.v3.y);
+            const max = Math.max(this.v1.y, this.v2.y, this.v3.y);
+
+            const mb = new Vertex((this.v1.x), (min + max)/2);
+            
+            return euclidean(mb, v) < (max - mb.y) - 0.001;
+        }
+
+        if ((this.v1.y === this.v2.y) && (this.v2.y === this.v3.y)) {
+
+            const min = Math.min(this.v1.x, this.v2.x, this.v3.x);
+            const max = Math.max(this.v1.x, this.v2.x, this.v3.x);
+
+            const mb = new Vertex((min + max)/2, this.v1.y);
+            return euclidean(mb, v) < (max - mb.x) - 0.001;
+        }
+
         return euclidean(this.circumCenter(), v) < this.circumRadius() - 0.001;
     }
 }

@@ -1,4 +1,4 @@
-import { Vertex } from "../../types/graphs";
+import { Vertex } from "../types/graphs";
 
 /**
  * Randomly generates points within provided boundaries

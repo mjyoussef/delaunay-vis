@@ -1,7 +1,7 @@
 import { Vertex } from "../../types/graphs";
 import { euclidean } from "../../utils/distance";
 import { minEnclosingCircle } from "../../utils/enclosingCircle";
-import { randPointGenerator } from './point_generator';
+import { randPointGenerator } from '../../utils/point_generator';
 
 /**
  * Determines whether or not a point is inside a circle

@@ -44,7 +44,6 @@ describe("uniqueEdges tests", () => {
     });
 });
 
-
 function isValidTriangulation(triangles) {
     for (let i=0; i<triangles.length; i++) {
         const v1 = triangles[i].v1;
@@ -73,6 +72,12 @@ describe("triangulating small sets", () => {
 
     test("multiple points", () => {
         const vertices = [new Vertex(0,0), new Vertex(3,4), new Vertex(2,1), new Vertex(10,0), new Vertex(5,8), new Vertex(3,3), new Vertex(8,-0.5)];
+        const output = triangulate(vertices);
+        expect(isValidTriangulation(output)).toBeTruthy();
+    });
+
+    test("points along same axis", () => {
+        const vertices = [new Vertex(0,0), new Vertex(2,1), new Vertex(4,4), new Vertex(2,-1), new Vertex(2,8), new Vertex(10,4), new Vertex(11,4)];
         const output = triangulate(vertices);
         expect(isValidTriangulation(output)).toBeTruthy();
     });
