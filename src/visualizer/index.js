@@ -33,27 +33,6 @@ function triangulate_display(vertices) {
         app.stage.addChild(line);
 
         line.lineStyle(1, 0xff0000).moveTo(v1.x,v1.y).lineTo(v2.x, v2.y);
-
-        if (!seen.has(v1.toString())) {
-
-            const dot = new Graphics();
-
-            dot.beginFill(0x00ff00);
-            dot.drawCircle(v1.x, v1.y, 2);
-            dot.endFill();
-
-            app.stage.addChild(dot);
-        }
-
-        if (!seen.has(v2.toString())) {
-            const dot = new Graphics();
-
-            dot.beginFill(0x00ff00);
-            dot.drawCircle(v1.x, v1.y, 2);
-            dot.endFill();
-
-            app.stage.addChild(dot);
-        }
     }
 }
 
@@ -92,6 +71,9 @@ submit.addEventListener('change', (e) => {
 slider.addEventListener('change', (e) => {
     e.preventDefault();
     const num_points = parseInt(e.target.value);
+
+    const num_points_container = document.getElementById("vertices");
+    num_points_container.innerHTML = `<h1>Vertices: ${num_points}</h1>`;
 
     const vertices = randPointGenerator(num_points, 10, 1200, 10, 600);
     triangulate_display(vertices);
