@@ -55,10 +55,30 @@ function considerVertex(v, triangles) {
 
         return true;
     });
+    
+    const edges_map = new Map();
+    const edges_count = new Map();
 
-    const unique_edges = uniqueEdges(edges);
+    edges.forEach(e => {
+        if (edges_count.has(e.id)) {
+            edges_count.set(e.id, edges_count.get(e.id)+1);
+        } else {
+            edges_count.set(e.id, 1);
+        }
 
-    unique_edges.forEach((e) => {
+        if (!edges_map.has(e.id)) {
+            edges_map.set(e.id, e);
+        }
+    });
+
+    const single_edges = [];
+    for (let key of edges_count.keys()) {
+        if (edges_count.get(key) === 1) {
+            single_edges.push(edges_map.get(key));
+        }
+    }
+
+    single_edges.forEach((e) => {
         const new_triangle = new Triangle(e.v1, e.v2, v);
         new_triangles.push(new_triangle);
     });
@@ -84,7 +104,7 @@ export function triangulate(vertices) {
         const v1 = triangle.v1;
         const v2 = triangle.v2;
         const v3 = triangle.v3;
-        
+
         return !containsVertex(v1, superTriangle) 
                 && !containsVertex(v2, superTriangle)
                 && !containsVertex(v3, superTriangle);
