@@ -84,7 +84,7 @@ export function triangulate(vertices) {
         const v1 = triangle.v1;
         const v2 = triangle.v2;
         const v3 = triangle.v3;
-
+        
         return !containsVertex(v1, superTriangle) 
                 && !containsVertex(v2, superTriangle)
                 && !containsVertex(v3, superTriangle);
