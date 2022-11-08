@@ -19,5 +19,16 @@ import { Vertex } from "../types/graphs";
         points[i] = new Vertex(x, y);
     }
 
-    return points;
+    const seen = new Set();
+    const output = [];
+    for (let i=0; i<points.length; i++) {
+        if (seen.has(points[i].toString())) {
+            continue;
+        } else {
+            seen.add(points[i].toString());
+            output.push(points[i]);
+        }
+    }
+
+    return output;
 }

@@ -153,7 +153,7 @@ export class Triangle {
 
             const mb = new Vertex((this.v1.x), (min + max)/2);
             
-            return euclidean(mb, v) < (max - mb.y) - 0.001;
+            return euclidean(mb, v) <= (max - mb.y) - 0.00001;
         }
 
         if ((this.v1.y === this.v2.y) && (this.v2.y === this.v3.y)) {
@@ -162,9 +162,9 @@ export class Triangle {
             const max = Math.max(this.v1.x, this.v2.x, this.v3.x);
 
             const mb = new Vertex((min + max)/2, this.v1.y);
-            return euclidean(mb, v) < (max - mb.x) - 0.001;
+            return euclidean(mb, v) <= (max - mb.x) - 0.00001;
         }
 
-        return euclidean(this.circumCenter(), v) < this.circumRadius() - 0.001;
+        return euclidean(this.circumCenter(), v) <= this.circumRadius() - 0.00001;
     }
 }

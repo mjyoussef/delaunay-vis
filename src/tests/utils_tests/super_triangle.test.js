@@ -19,7 +19,7 @@ function inTriangle(pt, triangle) {
     const inter1 = ray_cast_line.intersectionWith(line1);
     const inter2 = ray_cast_line.intersectionWith(line2);
 
-    return (inter1.x <= pt.x) && (inter2.x >= pt.x);
+    return (inter1.x <= pt.x) && (inter2.x >= pt.x) && (pt.y <= triangle.v3.y) && (pt.y >= triangle.v1.y);
 }
 
 /**
